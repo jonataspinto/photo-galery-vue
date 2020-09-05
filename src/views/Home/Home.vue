@@ -1,8 +1,8 @@
 <template>
   <Content>
-    <grid v-show="!loading">
+    <grid v-show="!imagesModule.loading">
       <card-image
-        v-for="(image, index) in images"
+        v-for="(image, index) in imagesModule.images"
         v-show="image.url"
         :key="image.url"
         :alt="`indexImage@${index}`"
@@ -10,8 +10,10 @@
         :author="image.author"
       />
     </grid>
-    <loading :active.sync="loading"
-      :is-full-page="true"></loading>
+    <loading
+      :active.sync="imagesModule.loading"
+      :is-full-page="true"
+    />
   </Content>
 </template>
 
@@ -24,6 +26,8 @@
   import {
     Grid,
   } from '../../components/modules';
+  import { mapState, mapActions } from 'vuex';
+
   export default {
     components: {
       Content,
@@ -31,27 +35,18 @@
       Grid,
       CardImage
     },
-    data(){
-      return {
-        images: [],
-        loading: true,
-      }
-    },
     mounted() {
-      fetch('https://picsum.photos/v2/list?limit=12')
-        .then(response => response.json())
-        .then(response => {
-          this.images = response.map(image => image.width > image.height && image);
-          console.log(response)
-          setTimeout(() => {
-            this.setLoading()
-          }, 3000);
-        })
+      this.fetchImages()
     },
     methods: {
-      setLoading: function () {
-        this.loading = !this.loading
-      },
+      ...mapActions({
+        fetchImages: 'fetchImages'
+      })
+    },
+    computed: {
+      ...mapState({
+        imagesModule: ({ imagesModule }) => imagesModule,
+      })
     }
   }
 </script>
