@@ -1,6 +1,7 @@
 import { injectGlobal } from 'vue-styled-components';
 import theme from './theme'
 import { variables } from './variables';
+import { darken } from 'polished';
 
 export const GlobalStyles = injectGlobal`
   *{
@@ -36,5 +37,25 @@ export const GlobalStyles = injectGlobal`
 
   .router-link-exact-active {
     color: #42b983;
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(${theme.backgroundColor});
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${darken(0.3, '#fefefe')};
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: ${darken(0.4, '#fefefe')};
   }
 `;
